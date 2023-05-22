@@ -19,54 +19,54 @@ Route::get('/', function () {
 
 Auth::routes();
 
+use App\Http\Controllers\HomeController;
+
+Route::get('/', [HomeController::class, 'index'])->name('posts.index');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
 use App\Http\Controllers\UserController;
 
-//Route::resource('users', 'UserController',['only'=>['index','show','create','store','destroy']]);
-Route::get('/users', [UserController::class, 'index'])->name('users.index');
-Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
-Route::post('/users', [UserController::class, 'store'])->name('users.store');
-Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
-Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
-Route::post('/users/{user}', [UserController::class, 'update'])->name('users.update');
-Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+Route::prefix('users')->name('users.')->middleware('auth')->group(function () {
 
+Route::get('/', [UserController::class, 'index'])->name('index');
+Route::get('/create', [UserController::class, 'create'])->name('create');
+Route::post('/', [UserController::class, 'store'])->name('store');
+Route::get('/{user}', [UserController::class, 'show'])->name('show');
+Route::get('/{user}/edit', [UserController::class, 'edit'])->name('edit');
+Route::post('/{user}', [UserController::class, 'update'])->name('update');
+Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy');
+
+});
 
 use App\Http\Controllers\PostController;
 
-Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
-Route::get('/posts/create', [PostController::class, 'add'])->name('posts.add');
-Route::post('/posts/create', [PostController::class, 'create'])->name('posts.create');
-Route::get('/posts/edit', [PostController::class, 'edit'])->name('posts.edit');
-Route::get('/posts/destroy', [PostController::class, 'destroy'])->name('posts.destroy');
-Route::delete('/posts/destroy', [PostController::class, 'destroy'])->name('posts.destroy');
-Route::get('/posts/edit',  [PostController::class, 'edit'])->name('posts.edit');
-Route::post('/posts/update',  [PostController::class, 'update'])->name('posts.update');
+Route::prefix('posts')->name('posts.')->group(function () {
 
+    Route::get('/', [PostController::class, 'index'])->name('index');
+    Route::get('/create', [PostController::class, 'add'])->middleware('auth')->name('add');
+    Route::post('/create', [PostController::class, 'create'])->middleware('auth')->name('create');
+    Route::get('/edit', [PostController::class, 'edit'])->middleware('auth')->name('edit');
+    Route::get('/destroy', [PostController::class, 'destroy'])->middleware('auth')->name('destroy');
+    Route::delete('/destroy', [PostController::class, 'destroy'])->middleware('auth')->name('destroy');
+    Route::get('/edit',  [PostController::class, 'edit'])->middleware('auth')->name('edit');
+    Route::post('/update',  [PostController::class, 'update'])->middleware('auth')->name('update');
+    Route::get('comment/{post}', [PostController::class, 'commentCreate'])->name('commentCreate');
+    Route::get('/show/{id}', [PostController::class, 'show'])->name('show');
 
-// commentsに関するルーティング
-use App\Http\Controllers\CommentController;
-
-Route::prefix('comments')->name('comments.')->middleware('auth')->group(function () {
-
-    // コメント投稿画面表示
-    Route::get('/create', [CommentController::class, 'create'])->name('create');
-    Route::post('/', [CommentController::class, 'store'])->name('store');
-
-    // コメント編集画面表示
-    Route::get('/{comment}/edit', [CommentController::class, 'edit'])->name('edit');
-    Route::put('/{comment}', [CommentController::class, 'update'])->name('update');
-
-    // コメント削除処理
-    Route::delete('/{comment}', [CommentController::class, 'destroy'])->name('destroy');
 });
 
+use App\Http\Controllers\CommentController;
+
+Route::prefix('comments')->name('comments.')->group(function () {
+
+    Route::post('/create', [CommentController::class, 'create'])->name('create');
+    Route::get('/{id}', [CommentController::class, 'index'])->name('index');
+
+});
 
 use App\Http\Controllers\AdminController;
 
 Route::get('/admin/login', [AdminController::class, 'showLoginForm'])->name('admin.login');
 Route::post('/admin/login', [AdminController::class, 'login'])->name('admin.login.post');
 Route::post('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
-

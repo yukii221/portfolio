@@ -23,19 +23,19 @@
                     <div class="form-group row">
                         <label class="col-md-2">メールアドレス</label>
                         <div class="col-md-10">
-                            <textarea class="form-control" name="email" rows="20">{{ old('email') }}</textarea>
+                            <input type="text" class="form-control" name="email" value="{{ old('email') }}">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-2">パスワード</label>
                         <div class="col-md-10">
-                            <textarea class="form-control" name="password" rows="20">{{ old('password') }}</textarea>
+                            <input type="text" class="form-control" name="password" value="{{ old('password') }}">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-2">プロフィール</label>
                         <div class="col-md-10">
-                            <input type="text" class="form-control" name="profile" value="{{ old('profile') }}">
+                            <textarea class="form-control" name="profile" rows="20">{{ old('profile') }}</textarea>
                         </div>
                     </div>  
                     @csrf

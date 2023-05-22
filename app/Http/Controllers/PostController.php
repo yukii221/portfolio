@@ -6,6 +6,7 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Auth;
+use App\Models\Comment;
 
 class PostController extends Controller
 {
@@ -16,8 +17,6 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        
-        {
         $cond_title = $request->cond_title;
         if ($cond_title != '') {
             $posts = Post::where('title', 'like', "%$cond_title%")->get();
@@ -25,7 +24,7 @@ class PostController extends Controller
             $posts = Post::all();
         }
 
-        return view('posts.index', compact('posts', 'cond_title'));}
+        return view('posts.index', compact('posts', 'cond_title'));
     }
     
     public function add()
@@ -79,13 +78,10 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $post)
+    public function show($id)
     {
-        //
-        $user_id = $post->user_id;
-        $user = DB::table('users')->where('id',$user_id)->first();
-        
-      return view('posts.detail',['post' => $post,'user' => $user]);
+        $post = Post::find($id);
+        return view('posts.show',compact('post'));
     }
 
     /**
@@ -96,12 +92,10 @@ class PostController extends Controller
      */
     public function edit(Request $request)
     {
-        //$post = Post::findOrFail($id);
         $post = Post::find($request->id);
         if (empty($post)) {
             abort(404);
         }
-        
       return view('posts.edit',['post_form' => $post]);
         
     }
@@ -115,10 +109,6 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //$post = Post::findOrFail($id);
-       // $post->body = $request->body;
-        //$post->save();
-        
          // Validationをかける
         $this->validate($request, Post::$rules);
         // Post Modelからデータを取得する
@@ -153,14 +143,16 @@ class PostController extends Controller
      */
     public function destroy(Request $request)
     {
-        // 該当するNews Modelを取得
         $post = Post::find($request->id);
-        
         // 削除する
         if ($post) {
             $post->delete();
-        
-     
+        }
       return redirect()->to('/posts');
     }
-}}
+    
+    public function commentCreate(Request $request, $post)
+    {
+        return view('posts.commentCreate', ['post' => $post]);
+    }
+}

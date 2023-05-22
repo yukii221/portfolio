@@ -43,7 +43,6 @@
                                     <th>{{ $user->id }}</th>
                                     <td>{{ Str::limit($user->name, 100) }}</td>
                                     <td>{{ Str::limit($user->email, 100) }}</td>
-                                    <td>{{ Str::limit($user->name, 100) }}</td>
                                     <td>{{ Str::limit($user->profile, 250) }}</td>
                                     <td>
                                         <div>

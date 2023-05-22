@@ -51,27 +51,25 @@ class UserController extends Controller
         return view('users.edit', compact('user'));
     }
 
-    public function update(Request $request)
+    public function update(Request $request,$id)
     {
-        dd(__LINE__);
          // Validationをかける
         $this->validate($request, User::$rules);
         // Post Modelからデータを取得する
-        $user = User::find($request->id);
+        $user = User::find($id);
         
         // データが見つからない場合は直前のページに戻る
         if (!$user) {
-      return back()->with('error', 'データが見つかりませんでした。');
-    }
+            return back()->with('error', 'データが見つかりませんでした。');
+        }
 
         // 送信されてきたフォームデータを格納する
         $user_form = $request->all();
-
         unset($user_form['_token']);
         // 該当するデータを上書きして保存する
         $user->fill($user_form)->save();
-        
-      return redirect()->to('users.index');
+
+        return redirect()->route('users.index');
     }
 
     public function destroy($id)

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->string('title');
             $table->text('content');
-            $table->string('category');
+            $table->string('category')->nullable();
             $table->string('image_url')->nullable();
             $table->string('video_url')->nullable();
             $table->timestamps();

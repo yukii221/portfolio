@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Comment extends Model
 {
     use HasFactory;
+    
+    protected $guarded = array('id');
+
+    public static $rules = array(
+        'content' => 'required',
+    );
 }

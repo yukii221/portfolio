@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use Illuminate\Http\Request;
+use Auth;
+use App\Models\Post;
 
 class CommentController extends Controller
 {
@@ -12,9 +14,11 @@ class CommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        //
+        $post = Post::find($id);
+        $comments = $post->comments;
+        return view('comments.index',compact('comments'));
     }
 
     /**
@@ -22,9 +26,20 @@ class CommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        // Validationを行う
+        $this->validate($request, Comment::$rules);
+
+        $comment = new Comment;
+        $form = $request->all();
+
+        // データベースに保存する
+        $comment->fill($form);
+        $comment->user_id = Auth::id();
+        $comment->save();
+
+        return redirect('/home');
     }
 
     /**
@@ -33,10 +48,11 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
-        //
+       //
     }
+    
 
     /**
      * Display the specified resource.
@@ -44,7 +60,7 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function show(Comment $comment)
+    public function show()
     {
         //
     }
@@ -55,7 +71,7 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function edit(Comment $comment)
+    public function edit()
     {
         //
     }
@@ -67,7 +83,7 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Comment $comment)
+    public function update()
     {
         //
     }
@@ -78,7 +94,7 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Comment $comment)
+    public function destroy()
     {
         //
     }
