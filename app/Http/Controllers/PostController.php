@@ -92,12 +92,16 @@ class PostController extends Controller
      */
     public function edit(Request $request)
     {
+        //$post = Post::find($request->id);
+        //if (empty($post)) {
+           // abort(404);
+        //}
+      //return view('posts.edit',['post_form' => $post]);
         $post = Post::find($request->id);
-        if (empty($post)) {
+        if (empty($post) || (!Auth::user()->isAdmin() && Auth::user()->id !== $post->user_id)) {
             abort(404);
         }
-      return view('posts.edit',['post_form' => $post]);
-        
+    return view('posts.edit', ['post_form' => $post]);
     }
 
     /**
@@ -132,6 +136,10 @@ class PostController extends Controller
         // 該当するデータを上書きして保存する
         $post->fill($post_form)->save();
         
+        if (empty($post) || (!Auth::user()->isAdmin() && Auth::user()->id !== $post->user_id)) {
+        abort(404);
+    }
+        
       return redirect()->to('/posts');
     }
 
@@ -144,6 +152,9 @@ class PostController extends Controller
     public function destroy(Request $request)
     {
         $post = Post::find($request->id);
+        if (empty($post) || (!Auth::user()->isAdmin() && Auth::user()->id !== $post->user_id)) {
+            abort(404);
+        }
         // 削除する
         if ($post) {
             $post->delete();
@@ -153,6 +164,6 @@ class PostController extends Controller
     
     public function commentCreate(Request $request, $post)
     {
-        return view('posts.commentCreate', ['post' => $post]);
+        return view('commentCreate', ['post' => $post]);
     }
 }

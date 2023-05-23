@@ -20,54 +20,38 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+        <nav class="navbar navbar-expand-lg bg-white">
+            <div class="container-fluid">
+                <h1 class="logo">あ</h1>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
-                <header>
-                    <div class="container">
-                        <div class="header-title-area">
-                            <h1 class="logo">あ</h1>
-                        </div>
-                        <div class="col-md-8">
-                            <form action="{{ route('posts.index') }}" method="post">
-                                <div class="form-group row">
-                                <div class="col-md-8">
-                                    <input type="text" class="form-control" name="cond_title" value="{{ $cond_title }}">
-                                </div>
-                                <div class="col-md-2">
-                                    @csrf
-                                    <input type="submit" class="btn btn-primary" value="検索">
-                                </div>
-                            </form>
-                        </div>
-                        <div class="header-navigation text-center">
-                            <ul class="navbar-nav mx-auto">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/home">ホーム</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="posts/create">投稿する</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/users/edit">マイプロフィール</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </header>
-
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
-
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/home">ホーム</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="posts/create">投稿する</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/users/">ユーザー一覧</a>
+                        </li>
+                        @if (Auth::check())
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('users.edit', ['user' => Auth::user()->id]) }}">マイプロフィール</a>
+                            </li>
+                        @endif
                     </ul>
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li class="nav-item me-2 my-4 my-lg-0">
+                            <form class="d-flex" role="search" action="{{ route('posts.index') }}" method="get">
+                                <input class="form-control me-2" type="search" placeholder="投稿検索" aria-label="Search" name="cond_title">
+                                <input type="submit" class="btn btn-outline-success" value="検索">
+                                @csrf
+                            </form>
+                        </li>
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
@@ -82,21 +66,23 @@
                             @endif
                         @else
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     {{ Auth::user()->name }}
                                 </a>
 
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('logout') }}"
+                                           onclick="event.preventDefault();
+                                                         document.getElementById('logout-form').submit();">
+                                            {{ __('Logout') }}
+                                        </a>
+    
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                            @csrf
+                                        </form>
+                                    </li>
+                                </ul>
                             </li>
                         @endguest
                     </ul>

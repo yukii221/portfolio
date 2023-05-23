@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.front')
 @section('title', '内容')
 
 @section('content')
@@ -8,7 +8,7 @@
         </div>
         <div class="row">
             <div class="col-md-4">
-                <a href="{{ route('posts.add') }}" role="button" class="btn btn-primary">新規作成</a>
+                <a href="{{ route('posts.add') }}" role="button" class="btn btn-outline-success">新規作成</a>
             </div>
             <div class="col-md-8">
                 <form action="{{ route('posts.index') }}" method="post">
@@ -19,7 +19,7 @@
                         </div>
                         <div class="col-md-2">
                             @csrf
-                            <input type="submit" class="btn btn-primary" value="検索">
+                            <input type="submit" class="btn btn-outline-success" value="検索">
                         </div>
                     </div>
                 </form>
@@ -27,8 +27,7 @@
         </div>
         <div class="row">
             <div class="list-news col-md-12 mx-auto">
-                <div class="row">
-                    <table class="table table-dark">
+                    <table class="table table-light">
                         <thead>
                             <tr>
                                 <th width="10%">ID</th>
@@ -45,14 +44,18 @@
                                     <td>{{ Str::limit($post->content, 250) }}</td>
                                     <td>
                                         <div>
-                                            <a href="{{ route('posts.edit', ['id' => $post->id]) }}">編集</a>
+                                            @if (Auth::check() && (Auth::user()->isAdmin() || Auth::user()->id === $post->user_id))
+                                                <a href="{{ route('posts.edit', ['id' => $post->id]) }}" class="btn btn-outline-success">編集</a>
+                                            @endif
                                         </div>
                                         <div>
-                                            <form action="{{ route('posts.destroy', ['id' => $post->id]) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit">削除</button>
-                                            </form>
+                                            @if (Auth::check() && (Auth::user()->isAdmin() || Auth::user()->id === $post->user_id))
+                                                <form onsubmit="return confirm('本当に削除しますか？')" action="{{ route('posts.destroy', ['id' => $post->id]) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-outline-success">削除</button>
+                                                </form>
+                                            @endif
                                         </div>    
                                     </td>
                                 </tr>

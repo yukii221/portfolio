@@ -20,30 +20,30 @@ class UserController extends Controller
     return view('users.index', compact('users', 'cond_name'));
 }
 
-    public function create()
-    {
-        return view('users.create');
-    }
+    //public function create()
+    //{
+        //return view('users.create');
+    //}
 
-    public function store(Request $request)
-    {
-        //dd(__LINE__);
-        $user = new User();
-        $user->name = $request->input('name');
-        $user->email = $request->input('email');
-        $user->password = bcrypt($request->input('password'));
-        //$user->age = $request->input('age');
-        $user->profile = $request->input('profile');
-        $user->save();
+    // public function store(Request $request)
+    // {
+    //     //dd(__LINE__);
+    //     $user = new User();
+    //     $user->name = $request->input('name');
+    //     $user->email = $request->input('email');
+    //     $user->password = bcrypt($request->input('password'));
+    //     //$user->age = $request->input('age');
+    //     $user->profile = $request->input('profile');
+    //     $user->save();
 
-        return redirect()->route('users.index');
-    }
+    //     return redirect()->route('users.index');
+    // }
 
-    public function show($id)
-    {
-        $user = User::find($id);
-        return view('users.show', compact('user'));
-    }
+    // public function show($id)
+    // {
+    //     $user = User::find($id);
+    //     return view('users.show', compact('user'));
+    // }
 
     public function edit($id)
     {
@@ -60,7 +60,7 @@ class UserController extends Controller
         
         // データが見つからない場合は直前のページに戻る
         if (!$user) {
-            return back()->with('error', 'データが見つかりませんでした。');
+        return back()->with('error', 'データが見つかりませんでした。');
         }
 
         // 送信されてきたフォームデータを格納する
@@ -77,5 +77,11 @@ class UserController extends Controller
         $user = User::find($id);
         $user->delete();
         return redirect()->route('users.index');
+    }
+    
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route('home');
     }
 }

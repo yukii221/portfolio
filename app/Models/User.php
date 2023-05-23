@@ -30,4 +30,11 @@ class User extends Authenticatable
         'name' => 'required',
         'email' => 'required',
         );
+        
+    public function isAdmin()
+    {
+        // 管理者であるかを判定するロジックを実装する
+        // 例えば、管理者フラグがtrueの場合などを判定する
+        return $this->email === 'sakura.02.sksb@gmail.com';
+    }
 }

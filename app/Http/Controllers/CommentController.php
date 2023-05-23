@@ -36,10 +36,14 @@ class CommentController extends Controller
 
         // データベースに保存する
         $comment->fill($form);
-        $comment->user_id = Auth::id();
+        if (Auth::check()) {
+            $comment->user_id = Auth::id();
+        } else {
+            $comment->user_id = null;
+        }
         $comment->save();
 
-        return redirect('/home');
+        return redirect()->route('posts.show', ['id' => $comment->post_id]);
     }
 
     /**

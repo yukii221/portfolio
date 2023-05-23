@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.front')
 @section('title', 'コメント入力')
 
 @section('content')

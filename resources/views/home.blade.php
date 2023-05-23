@@ -28,7 +28,7 @@
                                 @endif
                             </div>
                             <div>
-                                 <a class="btn btn-primary" href="{{ route('posts.show', ['id' => $post->id]) }}">詳細</a>
+                                 <a class="btn btn-outline-success" href="{{ route('posts.show', ['id' => $post->id]) }}">詳細</a>
                             </div>
                         </div>
                     </div>
