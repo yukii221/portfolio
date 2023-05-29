@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Comment;
+use App\Models\Category;
 
 class HomeController extends Controller
 {
@@ -28,9 +29,17 @@ class HomeController extends Controller
          $cond_title = $request->cond_title;
         if ($cond_title != '') {
             $posts = Post::where('title', 'like', "%$cond_title%")->get();
+        } elseif ($request->category_id != '') {
+            $posts = Post::where('category_id', $request->category_id)->get();
         } else {
             $posts = Post::all()->sortByDesc('updated_at');
         }
-        return view('home', ['cond_title' => $cond_title, 'posts' => $posts]);
+        $categories = Category::all();
+        
+        return view('home', [
+            'cond_title' => $cond_title, 
+            'posts' => $posts, 
+            'categories' => $categories,
+        ]);
     }
 }

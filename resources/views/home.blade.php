@@ -37,8 +37,16 @@
             </div>
         </div>
     </div>
-    <!--<div class="card-contents">-->
-    <!--    <h2 class="text-title">カテゴリー</h2>-->
-    <!--</div>-->
+    <div class="card-contents">
+    <h2 class="text-title">カテゴリー</h2>
+    <hr color="#c0c0c0">
+        <div class="row">
+            <div class="mx-auto mt-3 center-align">
+            @foreach($categories as $category)
+                <a class="btn btn-outline-success custom-button" href="/home?category_id={{ $category->id }}">{{ $category->name }}</a>
+            @endforeach
+            </div>
+        </div>
+    </div>
 </div>
 @endsection

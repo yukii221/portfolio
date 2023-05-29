@@ -74,3 +74,17 @@ header {
   color: #777;
   text-align: center;
 }
+
+.center-align {
+    display: flex;
+    justify-content: center;
+}
+
+.custom-button {
+  margin: 10px; /* ボタン間の横のスペースを調整 */
+  }
+
+.logo {
+            width: 100px;
+            height: auto;
+        }

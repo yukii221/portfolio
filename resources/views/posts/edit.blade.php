@@ -29,8 +29,13 @@
                     </div>
                     <div class="form-group row">
                         <label class="col-md-2">カテゴリー</label>
-                        <div class="col-md-10">
-                            <input type="text" class="form-control" name="category" value="{{ $post_form->category }}">
+                        <div class="col-md-8">
+                            <select name="category_id" class="form-control">
+                                <option value="">選択してください</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>  
                     <div class="form-group row">
@@ -54,7 +59,7 @@
                         <div class="col-md-10">
                             <input type="hidden" name="id" value="{{ $post_form->id }}">
                             @csrf
-                            <input type="submit" class="btn btn-primary" value="更新">
+                            <input type="submit" class="btn btn-success" value="更新">
                         </div>
                     </div>
                 </form>

@@ -11,14 +11,21 @@
                 <a href="{{ route('posts.add') }}" role="button" class="btn btn-outline-success">新規作成</a>
             </div>
             <div class="col-md-8">
-                <form action="{{ route('posts.index') }}" method="post">
-                    <div class="form-group row">
-                        <label class="col-md-2">タイトル</label>
+                <form action="{{ route('posts.index') }}" method="get">
+                    <div class="form-group row justify-content-end">
                         <div class="col-md-8">
-                            <input type="text" class="form-control" name="cond_title" value="{{ $cond_title }}">
+                            <select name="category_id" class="form-control">
+                                <option value="">カテゴリー絞込</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}"
+                                        @if ($category->id == $request->category_id)
+                                            selected
+                                        @endif
+                                    >{{ $category->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="col-md-2">
-                            @csrf
                             <input type="submit" class="btn btn-outline-success" value="検索">
                         </div>
                     </div>
@@ -33,7 +40,8 @@
                                 <th width="10%">ID</th>
                                 <th width="20%">タイトル</th>
                                 <th width="40%">本文</th>
-                                <th width="30%"></th>
+                                <th width="15%">カテゴリー</th>
+                                <th width="15%"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -42,6 +50,7 @@
                                     <th>{{ $post->id }}</th>
                                     <td>{{ Str::limit($post->title, 100) }}</td>
                                     <td>{{ Str::limit($post->content, 250) }}</td>
+                                    <td>{{ $post->category->name }}</td>
                                     <td>
                                         <div>
                                             @if (Auth::check() && (Auth::user()->isAdmin() || Auth::user()->id === $post->user_id))

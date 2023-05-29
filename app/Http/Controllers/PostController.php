@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Auth;
 use App\Models\Comment;
+use App\Models\Category;
 
 class PostController extends Controller
 {
@@ -20,16 +21,20 @@ class PostController extends Controller
         $cond_title = $request->cond_title;
         if ($cond_title != '') {
             $posts = Post::where('title', 'like', "%$cond_title%")->get();
+        } elseif ($request->category_id != '') {
+            $posts = Post::where('category_id', $request->category_id)->get();
         } else {
             $posts = Post::all();
         }
+        $categories = Category::all();
 
-        return view('posts.index', compact('posts', 'cond_title'));
+        return view('posts.index', compact('posts', 'cond_title','categories','request'));
     }
     
     public function add()
     {
-        return view('posts.create');
+        $categories = Category::all(); 
+        return view('posts.create', compact('categories'));
     }
 
     /**
@@ -43,27 +48,36 @@ class PostController extends Controller
 
         $post = new Post;
         $form = $request->all();
-
-        // フォームから画像が送信されてきたら、保存して、$news->image_path に画像のパスを保存する
+    
+        // フォームから画像が送信されてきたら、保存して、画像のパスを保存する
         if (isset($form['image'])) {
             $path = $request->file('image')->store('public/image');
             $post->image_url = basename($path);
         } else {
             $post->image_url = null;
         }
-        
-        $post->user_id = Auth::id(); 
-
+    
+        $post->user_id = Auth::id();
+    
         // フォームから送信されてきた_tokenを削除する
         unset($form['_token']);
         // フォームから送信されてきたimageを削除する
         unset($form['image']);
-
+    
         // データベースに保存する
         $post->fill($form);
+        $category_id = $request->input('category_id');
+        $post->category_id = $category_id;
         $post->save();
+    
+        // $category = Category::find();
+        // if ($category) {
+        //     // カテゴリとの関連付け
+        //     $post->category()->associate($category);
+        //     $post->save();
+        // }
         
-        return redirect()->route('posts.index');
+        return redirect()->to('/posts');
     }
 
     /**
@@ -101,7 +115,10 @@ class PostController extends Controller
         if (empty($post) || (!Auth::user()->isAdmin() && Auth::user()->id !== $post->user_id)) {
             abort(404);
         }
-    return view('posts.edit', ['post_form' => $post]);
+        
+        $categories = Category::all();
+        
+        return view('posts.edit', ['post_form' => $post, 'categories' => $categories]);
     }
 
     /**
@@ -118,27 +135,31 @@ class PostController extends Controller
         // Post Modelからデータを取得する
         $post = Post::find($request->id);
         // 送信されてきたフォームデータを格納する
-        $post_form = $request->all();
+        $form = $request->all();
 
         if ($request->remove == 'true') {
-            $post_form['image_url'] = null;
+            $form['image_url'] = null;
         } elseif ($request->file('image')) {
             $path = $request->file('image')->store('public/image');
-            $post_form['image_url'] = basename($path);
+            $form['image_url'] = basename($path);
         } else {
-            $post_form['image_url'] = $post->image_path;
+            $form['image_url'] = $post->image_path;
         }
 
-        unset($post_form['image']);
-        unset($post_form['remove']);
-        unset($post_form['_token']);
+        unset($form['image']);
+        unset($form['remove']);
+        unset($form['_token']);
 
         // 該当するデータを上書きして保存する
-        $post->fill($post_form)->save();
+        $post->fill($form);
+        $category_id = $request->input('category_id');
+        $post->category_id = $category_id;
+        $post->save();
         
-        if (empty($post) || (!Auth::user()->isAdmin() && Auth::user()->id !== $post->user_id)) {
+        if (empty($post) || (!Auth::user()->isAdmin() && Auth::user()->id !== $post->user_id)) 
+        {
         abort(404);
-    }
+         }
         
       return redirect()->to('/posts');
     }

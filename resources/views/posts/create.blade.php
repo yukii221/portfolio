@@ -29,10 +29,15 @@
                     </div>
                     <div class="form-group row">
                         <label class="col-md-2">カテゴリー</label>
-                        <div class="col-md-10">
-                            <input type="text" class="form-control" name="category" value="{{ old('category') }}">
+                        <div class="col-md-8">
+                            <select name="category_id" class="form-control">
+                                <option value="">選択してください</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
-                    </div>  
+                    </div>
                     <div class="form-group row">
                         <label class="col-md-2">画像</label>
                         <div class="col-md-10">
