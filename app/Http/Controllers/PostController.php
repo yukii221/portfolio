@@ -185,6 +185,6 @@ class PostController extends Controller
     
     public function commentCreate(Request $request, $post)
     {
-        return view('commentCreate', ['post' => $post]);
+        return view('posts.commentCreate', ['post' => $post]);
     }
 }
