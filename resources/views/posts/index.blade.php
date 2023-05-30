@@ -50,7 +50,11 @@
                                     <th>{{ $post->id }}</th>
                                     <td>{{ Str::limit($post->title, 100) }}</td>
                                     <td>{{ Str::limit($post->content, 250) }}</td>
-                                    <td>{{ $post->category->name }}</td>
+                                    <td>
+                                        @if ($post->category !== null)
+                                        {{ $post->category->name }}
+                                        @endif
+                                    </td>
                                     <td>
                                         <div>
                                             @if (Auth::check() && (Auth::user()->isAdmin() || Auth::user()->id === $post->user_id))

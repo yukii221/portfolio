@@ -10,26 +10,22 @@
             <div class="posts col-md-8 mx-auto mt-3">
                 @foreach($posts as $post)
                     <div class="post">
-                        <div class="row">
-                            <div class="text col-md-6">
-                                <div class="date">
-                                    {{ $post->updated_at->format('Y年m月d日') }}
-                                </div>
-                                <div class="title">
-                                    {{ Str::limit($post->title, 150) }}
-                                </div>
-                                <div class="body mt-3">
-                                    {{ Str::limit($post->content, 1500) }}
-                                </div>
+                            <div class="date">
+                                {{ $post->updated_at->format('Y年m月d日') }}
                             </div>
-                            <div class="image col-md-6 text-right mt-4">
-                                @if ($post->image_url)
-                                    <img src="{{ secure_asset('storage/image/' . $post->image_url) }}">
-                                @endif
+                            <div class="title">
+                                {{ Str::limit($post->title, 150) }}
                             </div>
-                            <div>
-                                 <a class="btn btn-outline-success" href="{{ route('posts.show', ['id' => $post->id]) }}">詳細</a>
+                            <div class="body mt-3">
+                                {{ Str::limit($post->content, 1500) }}
                             </div>
+                            @if ($post->image_url)
+                                <div class="image col-md-6 text-right mt-4">
+                                <img src="{{ secure_asset('storage/image/' . $post->image_url) }}">
+                                </div>
+                            @endif
+                        <div>
+                             <a class="btn btn-outline-success" href="{{ route('posts.show', ['id' => $post->id]) }}">詳細</a>
                         </div>
                     </div>
                     <hr color="#c0c0c0">
