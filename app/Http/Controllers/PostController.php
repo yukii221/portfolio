@@ -177,6 +177,7 @@ class PostController extends Controller
             abort(404);
         }
         // 削除する
+        $post->comments()->delete();
         if ($post) {
             $post->delete();
         }

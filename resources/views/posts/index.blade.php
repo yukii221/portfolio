@@ -1,10 +1,10 @@
 @extends('layouts.front')
-@section('title', '内容')
+@section('title', '投稿一覧')
 
 @section('content')
     <div class="container">
         <div class="row">
-            <h2>投稿一覧</h2>
+            <h2 class="text-title">投稿一覧</h2>
         </div>
         <div class="row">
             <div class="col-md-4">
@@ -37,24 +37,23 @@
                     <table class="table table-light">
                         <thead>
                             <tr>
-                                <th width="10%">ID</th>
-                                <th width="20%">タイトル</th>
-                                <th width="40%">本文</th>
                                 <th width="15%">カテゴリー</th>
-                                <th width="15%"></th>
+                                <th width="25%">タイトル</th>
+                                <th width="50%">本文</th>
+                                <th width="10%"></th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($posts as $post)
                                 <tr>
-                                    <th>{{ $post->id }}</th>
-                                    <td>{{ Str::limit($post->title, 100) }}</td>
-                                    <td>{{ Str::limit($post->content, 250) }}</td>
+                                    <!--<th>{{ $post->id }}</th>-->
                                     <td>
                                         @if ($post->category !== null)
                                         {{ $post->category->name }}
                                         @endif
                                     </td>
+                                    <td>{{ Str::limit($post->title, 100) }}</td>
+                                    <td>{{ Str::limit($post->content, 250) }}</td>
                                     <td>
                                         <div>
                                             @if (Auth::check() && (Auth::user()->isAdmin() || Auth::user()->id === $post->user_id))

@@ -1,20 +1,19 @@
 @extends('layouts.front')
-@section('title', '一覧')
+@section('title', 'ユーザー一覧')
 
 @section('content')
     <div class="container">
         <div class="row">
-            <h2>ユーザー一覧</h2>
+            <h2 class="text-title">ユーザー一覧</h2>
         </div>
-        <div class="row">
-            <div class="col-md-8">
+        <div>
+            <div>
                 <form action="{{ route('users.index') }}" method="get">
-                    <div class="form-group row">
-                        <label class="col-md-2">名前</label>
-                        <div class="col-md-8">
+                    <div class="form-group row justify-content-end">
+                        <div class="col-md-5">
                             <input type="text" class="form-control" name="cond_name" value="{{ $cond_name }}">
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-1">
                             <input type="submit" class="btn btn-outline-success" value="検索">
                         </div>
                     </div>
@@ -26,17 +25,15 @@
                 <table class="table table-light">
                     <thead>
                         <tr>
-                            <th width="10%">ID</th>
                             <th width="20%">名前</th>
                             <th width="20%">メールアドレス</th>
-                            <th width="30%">プロフィール</th>
-                            <th width="20%"></th>
+                            <th width="50%">プロフィール</th>
+                            <th width="10%"></th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($users as $user)
                             <tr>
-                                <th>{{ $user->id }}</th>
                                 <td>{{ Str::limit($user->name, 100) }}</td>
                                 <td>{{ Str::limit($user->email, 100) }}</td>
                                 <td>{{ Str::limit($user->profile, 250) }}</td>

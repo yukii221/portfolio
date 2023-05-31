@@ -3,6 +3,14 @@
 
 @section('content')
 <div class="container">
+    <div class="row">
+        <div>
+            <span>カテゴリー</span>
+            @foreach($categories as $category)
+                <a class="btn btn-outline-success custom-button btn-sm" href="/home?category_id={{ $category->id }}">{{ $category->name }}</a>
+            @endforeach
+        </div>
+    </div>
     <div class="card-contents">
         <h2 class="text-title">投稿一覧</h2>
         <hr color="#c0c0c0">
@@ -30,17 +38,6 @@
                     </div>
                     <hr color="#c0c0c0">
                 @endforeach
-            </div>
-        </div>
-    </div>
-    <div class="card-contents">
-    <h2 class="text-title">カテゴリー</h2>
-    <hr color="#c0c0c0">
-        <div class="row">
-            <div class="mx-auto mt-3 center-align">
-            @foreach($categories as $category)
-                <a class="btn btn-outline-success custom-button" href="/home?category_id={{ $category->id }}">{{ $category->name }}</a>
-            @endforeach
             </div>
         </div>
     </div>

@@ -5,9 +5,8 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 mx-auto">
-                <h2>新規作成</h2>
+                <h2 class="text-title">新規作成</h2>
                 <form action="{{ route('posts.create') }}" method="post" enctype="multipart/form-data">
-
                     @if (count($errors) > 0)
                         <ul>
                             @foreach($errors->all() as $e)
@@ -16,22 +15,22 @@
                         </ul>
                     @endif
                     <div class="form-group row">
-                        <label class="col-md-2">タイトル</label>
-                        <div class="col-md-10">
+                        <label class="col-md-4 col-form-label text-md-right">タイトル</label>
+                        <div>
                             <input type="text" class="form-control" name="title" value="{{ old('title') }}">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-md-2">本文</label>
-                        <div class="col-md-10">
+                        <label class="col-md-4 col-form-label text-md-right">本文</label>
+                        <div>
                             <textarea class="form-control" name="content" rows="20">{{ old('content') }}</textarea>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-md-2">カテゴリー</label>
-                        <div class="col-md-8">
+                        <label class="col-md-4 col-form-label text-md-right"></label>
+                        <div>
                             <select name="category_id" class="form-control">
-                                <option value="">選択してください</option>
+                                <option value="">カテゴリー選択</option>
                                 @foreach($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
                                 @endforeach
@@ -39,13 +38,17 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-md-2">画像</label>
+                        <label class="col-md-4 col-form-label text-md-right">画像</label>
                         <div class="col-md-10">
                             <input type="file" class="form-control-file" name="image">
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <div>
+                            <input type="submit" class="btn btn-outline-success" value="更新">
+                        </div>
+                    </div>
                     @csrf
-                    <input type="submit" class="btn btn-primary" value="更新">
                 </form>
             </div>
         </div>
